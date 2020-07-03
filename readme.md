@@ -1,8 +1,8 @@
 # typedmiddleware
 
-Middleware is convenient, at the of type safety and implicit control flow:
+Middleware is convenient but it comes at a cost to type safety and explicit code:
 - using `context.Context` to store and retrieve values is not type-safe, and relies on implicit temporal coupling
-- implicit control flow: it's hard to know which middleware ended the chain by responding, and the code that runs the middleware can be confusing to to step through with a debugger
+- it's hard to know which middleware ended the chain by responding, and the code that runs the middleware can be confusing to to step through with a debugger
 
 typedmiddleware uses code generation to avoid both of these issues without sacrificing convenience. You define a stack of middleware as an interface, and use go generate to generate a runnable stack. It will return a result on which you can retrieve values set by the middleware via their individual interfaces - e.g the `User()` method of `UserForRequest`:
 
