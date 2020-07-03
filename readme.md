@@ -10,7 +10,7 @@ typedmiddleware uses code generation to avoid both of these issues without sacri
 ```go
 //go:generate typedmiddleware Middleware
 
-// this defines the stack of middleware you wish to use - order is significant, as middleware can
+// 1️⃣ this defines the stack of middleware you wish to use - order is significant, as middleware can
 // return early
 type Middleware interface {
 	appmiddleware.UserForRequest
@@ -18,15 +18,15 @@ type Middleware interface {
 
 func GetUserHome(res http.ResponseWriter, req http.Request) {
 	result, override := NewMiddlewareStack().Run(req)
-	// if a middleware wishes to respond an override is returned,
+	// 2️⃣ if a middleware wishes to respond an override is returned,
 	if override != nil {
         // you can define your own response handlers that can inspect the response struct
 		middleware.DefaultRespond(override, res)
 		return
 	}
 
-	// result is a GetUserHomeMiddleware, and by the middleware contract (see below), if 
-	// no override was returned all methods are now safe to use.
+	// 3️⃣ result is a GetUserHomeMiddleware, and as no override was 
+	// returned all methods are now safe to use.
 	user := result.User()
 	fmt.Fprintf(res, "User ID %d", user.ID)
 }
