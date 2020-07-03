@@ -8,9 +8,8 @@ typedmiddleware uses code generation to avoid both of these issues without sacri
 
 
 ```go
-// user_handler.go
-
-// the following line configures the generation, which outputs NewMiddlewareStack and its implementation
+// the following line configures the generation, which outputs 
+// NewMiddlewareStack and its implementation
 //go:generate typedmiddleware Middleware
 
 // this defines the stack of middleware you wish to use - order is significant, as middleware can
@@ -28,7 +27,7 @@ func GetUserHome(res http.ResponseWriter, req http.Request) {
 		return
 	}
 
-    // result is a GetUserHomeMiddleware, and by the middleware contract (see below), if 
+	// result is a GetUserHomeMiddleware, and by the middleware contract (see below), if 
     // no override was returned all methods are now safe to use.
 	cid := result.User()
 	fmt.Fprintf(res, "Got client ID %d", cid)
