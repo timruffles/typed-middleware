@@ -3,7 +3,7 @@ package appmiddleware
 import (
 	"net/http"
 
-	middleware2 "github.plaid.com/plaid/typed-middleware"
+	middleware2 "github.plaid.com/plaid/typedmiddleware"
 )
 
 type GetUserResult struct {

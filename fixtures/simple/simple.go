@@ -1,35 +1,34 @@
-//go:generate go run ../../cmd/typed-middleware.go SimpleMiddlewareStack
+//go:generate go run ../../cmd/typedmiddleware.go SimpleMiddleware
 package simple
 
 import (
 	"fmt"
 	"net/http"
-	"strings"
 
-	middleware2 "github.plaid.com/plaid/typed-middleware"
-	"github.plaid.com/plaid/typed-middleware/fixtures/mockmiddleware"
+	middleware2 "github.plaid.com/plaid/typedmiddleware"
+	"github.plaid.com/plaid/typedmiddleware/fixtures/mockmiddleware"
 )
 
-type SimpleMiddlewareStack interface {
+type SimpleMiddleware interface {
 	mockmiddleware.RequireContentType
 }
 
 type simpleHandler struct {
-	stack SimpleStack
+	stack SimpleMiddlewareStack
 }
 
 func NewSimpleHandler(
-) simpleHandler {
+	stack SimpleMiddlewareStack,
+) *simpleHandler {
 	// This part will be dependency injected as per normal - currently via app context
 	// Since clientID middleware has no constructor
-	h := simpleHandler{}
-	h.stack = NewSimpleStack(
-	)
-	return h
+	return &simpleHandler{
+		stack: stack,
+	}
 }
 
-func (h *simpleHandler) Handle(res http.ResponseWriter, req http.Request) {
-	_, override := h.stack.Run(req)
+func (h *simpleHandler) Handle(res http.ResponseWriter, req *http.Request) {
+	result, override := h.stack.Run(req)
 	// the stack value could come from ctx for now, or be replaced by a mock
 	if override != nil {
 		// or can explicitly check out what's happened: an error, or a result spec
@@ -37,5 +36,5 @@ func (h *simpleHandler) Handle(res http.ResponseWriter, req http.Request) {
 		return
 	}
 
-	fmt.Println(res, strings.NewReader("ok"))
+	fmt.Fprintf(res, "Content type from middleware: %s", result.ContentType())
 }

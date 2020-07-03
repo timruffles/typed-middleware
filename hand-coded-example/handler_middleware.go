@@ -1,10 +1,10 @@
-package handler
+package hand_coded_example
 
 import (
 	"net/http"
 
-	middleware2 "github.plaid.com/plaid/typed-middleware"
-	"github.plaid.com/plaid/typed-middleware/appmiddleware"
+	middleware2 "github.plaid.com/plaid/typedmiddleware"
+	"github.plaid.com/plaid/typedmiddleware/hand-coded-example/appmiddleware"
 )
 
 type HandlerDependenciesGenerated struct {

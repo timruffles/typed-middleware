@@ -24,7 +24,7 @@ func NewErrorResult(err error) *MiddlewareResponse {
 type responseSpec struct {
 	Header      http.Header
 	StatusCode  int
-	Body        io.Reader
+	// TODO
 }
 
 func Response(
@@ -36,7 +36,6 @@ func Response(
 		responseSpec: &responseSpec{
 			Header:      header,
 			StatusCode:  statusCode,
-			Body:        body,
 		},
 	}
 }
@@ -49,6 +48,8 @@ func Respond(overide *MiddlewareResponse, res http.ResponseWriter) {
 		// handle error
 	}
 	// set headers, etc
+	res.WriteHeader(overide.responseSpec.StatusCode)
+	res.Write([]byte{})
 }
 
 // Idea: this could be used as a placeholder for the GoGenerate call

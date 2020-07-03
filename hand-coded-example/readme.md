@@ -1,8 +1,8 @@
-# typed-middleware
+# typedmiddleware
 
 Middleware is convenient, but the cost is type safety (using context.Context to store and retrieve values), and opacity (it's hard to see where in the stack issues arise, and it's very hard to step through with a debugger).
 
-typed-middleware uses code generation to avoid both of these issues. You define a stack of middleware as an interface, and use go generate to generate a runnable stack:
+typedmiddleware uses code generation to avoid both of these issues. You define a stack of middleware as an interface, and use go generate to generate a runnable stack:
 
 
 ```go
