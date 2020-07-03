@@ -36,7 +36,7 @@ func GetUserHome(res http.ResponseWriter, req http.Request) {
 
 ## How does this work?
 
-typedmiddleware defines a constract with compatible middleware, and uses this to generate explicit code that ensures they are called in order.
+typedmiddleware defines a contract with compatible middleware, and uses this to generate explicit code that ensures they are called in order.
 
 The contract for middleware is:
 1. use `req` to ensure it is ready to respond to its interface methods being called, by returning (nil,nil)
@@ -44,7 +44,7 @@ The contract for middleware is:
     - returning a non-nil MiddlewareResponse
     - returning an error
     
-Using this contract, typedmiddleware can generate the implementation of the Run method that will call each middleware in order, ensuring that all dependant middleware are called before middleware that depend on them are. e.g if you specify a dependency on `UserForRequest`, and `UserForRequest` requires the `Authenticated` middleware, the following will happen when `Run()` is called:
+Using the semantics of this contract, typedmiddleware can generate the implementation of the Run method that will call each middleware in order, ensuring that all dependant middleware are called before middleware that depend on them are. e.g if you specify a dependency on `UserForRequest`, and `UserForRequest` requires the `Authenticated` middleware, the following will happen when `Run()` is called:
 
 1. `Authenticated` middleware's `Run(req)` method is called. 
     a. If run returns a response or error, we return to the caller
