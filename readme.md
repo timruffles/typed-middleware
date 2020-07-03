@@ -39,7 +39,7 @@ type UserForRequest interface {
 }
 ```
 
-The `go:generate` line configures typedmiddleware - here specifyingt that `NewMiddlewareStack` should be generated.
+The `go:generate` line configures typedmiddleware - here specifying that `NewMiddlewareStack` should be generated.
 
 ## Getting started
 
