@@ -40,7 +40,7 @@ func (h *getUserHandler) Handle(res http.ResponseWriter, req http.Request) {
 	// the stack value could come from ctx for now, or be replaced by a mock
 	if override != nil {
 		// or can explicitly check out what's happened: an error, or a result spec
-		middleware2.Respond(override, res)
+		middleware2.DefaultRespond(override, res)
 		return
 	}
 

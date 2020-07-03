@@ -15,7 +15,7 @@ func Run(sourcePackagePath string, sourceFileBasename string, target string) err
 		return err
 	}
 
-	buf, err := Generate(sourcePackagePath, parsed)
+	buf, err := Generate(sourcePackagePath, sourceFileBasename, parsed)
 	if err != nil {
 		return err
 	}

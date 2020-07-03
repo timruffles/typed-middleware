@@ -3,6 +3,7 @@ package generator
 import (
 	"fmt"
 	"go/types"
+	"regexp"
 
 	"golang.org/x/tools/go/packages"
 )
@@ -223,19 +224,13 @@ func getRunMethod(methods *types.MethodSet) *types.Func {
 	return nil
 }
 
+var lastType = regexp.MustCompile(`(\S+)$`)
+
 // firstParam of Run should be a http.Request
 func validateIsHttpRequest(firstParam *types.Var) (string, bool) {
-	obj, ok := firstParam.Type().(*types.Named)
-	if !ok {
-		return "", false
-	}
-
-	pkgPath := obj.Obj().Pkg().Path()
-	name := obj.Obj().Name()
-
-	fn := fmt.Sprintf("%s.%s", pkgPath, name)
-
-	return fn, fn == "net/http.Request"
+	str := types.ObjectString(firstParam, nil)
+	typString := lastType.FindString(str)
+	return typString, typString == "*net/http.Request"
 }
 
 type middlewareGraph struct {

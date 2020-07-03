@@ -40,21 +40,23 @@ func Response(
 	}
 }
 
-func Respond(overide *MiddlewareResponse, res http.ResponseWriter) {
+func DefaultRespond(overide *MiddlewareResponse, res http.ResponseWriter) {
 	if overide == nil {
 		// programming error
+		res.WriteHeader(500)
+		res.Write([]byte("Server Misconfigured"))
+		return
 	}
 	if overide.isError {
 		// handle error
+		res.WriteHeader(500)
+		res.Write([]byte("Server Error"))
+		return
 	}
 	// set headers, etc
 	res.WriteHeader(overide.responseSpec.StatusCode)
 	res.Write([]byte{})
 }
 
-// Idea: this could be used as a placeholder for the GoGenerate call
-func GenerateAndRunStack(t interface{}) (interface{}, *MiddlewareResponse) {
-	return nil, nil
-}
 
 

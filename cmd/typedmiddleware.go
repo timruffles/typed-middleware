@@ -20,7 +20,8 @@ func main() {
 	}
 
 	target := os.Args[1]
-	err = generator.Run(wd, "simple.go", target)
+	err = generator.Run(wd, os.Getenv("GOFILE"), target)
+
 	if err != nil {
 		log.Fatal(err)
 		return
