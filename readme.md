@@ -1,17 +1,25 @@
 # typedmiddleware
 
-Middleware is convenient, but the cost is type safety (using context.Context to store and retrieve values), and opacity (it's hard to know which middleware ended the chain by responding, and it's often hard to step through with a debugger).
+Middleware is convenient, but the cost is type safety (using `context.Context` to store and retrieve values), and opacity (it's hard to know which middleware ended the chain by responding, and it's often hard to step through with a debugger).
 
-typedmiddleware uses code generation to avoid both of these issues. You define a stack of middleware as an interface, and use go generate to generate a runnable stack:
+typedmiddleware uses code generation to avoid both of these issues. You define a stack of middleware as an interface, and use go generate to generate a runnable stack. It will return a result on which you can retrieve values set by the middleware via their individual interfaces - e.g the `User()` method of `UserForRequest`:
 
 
 ```go
-type GetUserHomeMiddleware interface {
+// user_handler.go
+
+// the following line configures the generation, which outputs NewMiddlewareStack and its implementation
+//go:generate typedmiddleware Middleware
+
+// this defines the stack of middleware you wish to use - order is significant, as middleware can
+// return early
+type Middleware interface {
 	appmiddleware.UserForRequest
 }
 
 func GetUserHome(res http.ResponseWriter, req http.Request) {
-	result, override := NewStack().Run(req)
+    // after you 
+	result, override := NewMiddlewareStack().Run(req)
 	// if a middleware wishes to respond an override is returned,
 	if override != nil {
         // you can define your own response handlers that can inspect the response struct
@@ -25,6 +33,10 @@ func GetUserHome(res http.ResponseWriter, req http.Request) {
 	fmt.Fprintf(res, "Got client ID %d", cid)
 }
 ```
+
+## How does this work?
+
+typedmiddleware defines a constract with compatible middleware, and uses this to generate explicit code that ensures they are called in order.
 
 The contract for middleware is:
 1. use `req` to ensure it is ready to respond to its interface methods being called, by returning (nil,nil)
