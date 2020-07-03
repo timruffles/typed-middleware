@@ -83,7 +83,6 @@ If there was no override, you can now access any method on the middleware interf
 
 ### Writing your own middleware
 
-Middleware needs to follow the contract: if it doesn't indicate an error or early response, handlers and other middleware that depend on it should be able to safely use its interface.
 
 Middleware is comprised of the interface that defines methods dependent code can access, and its implementing type. Normally this will be a struct.
 
@@ -95,9 +94,11 @@ type RequireContentType interface {
 }
 ```
 
-Handlers or middleware that depend on our RequireContentType middleware will be able to call `ContentType()` to access the non-empty value supplied in the user request. If one was not supplied, we'll indicate a response via a 400. This fulfils the contract: if we can't ensure the `ContentType()` method can be called from the information in the request, we indicate this by returning a response which will end the chain.
+A middleware needs to follow a contract: if it doesn't indicate an error or early response, handlers and other middleware that depend on it should be able to safely use its interface.
 
-Let's implement that. We'll need somewhere to define our `Run()` method, and which allows us to store a content type for future calls to `ContentType()`:
+Handlers or middleware that depend on our RequireContentType middleware will be able to call `ContentType()` to access the non-empty value supplied in the user request. If one was not supplied, we'll end the chain before our dependencies are called by indicating a 400 response should be returned. This fulfils the contract: either we find a content type and let the control flow continue to our dependencies, or indicate we must end the middleware chain at this point.
+
+To implement that we'll need somewhere to define our `Run()` method, which will need to store a content type for future calls to `ContentType()`:
 
 ```go
 type RequireContentTypeMiddleware struct {
