@@ -29,8 +29,8 @@ func GetUserHome(res http.ResponseWriter, req http.Request) {
 
 	// result is a GetUserHomeMiddleware, and by the middleware contract (see below), if 
 	// no override was returned all methods are now safe to use.
-	cid := result.User()
-	fmt.Fprintf(res, "Got client ID %d", cid)
+	user := result.User()
+	fmt.Fprintf(res, "User ID %d", user.ID)
 }
 ```
 
