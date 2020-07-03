@@ -18,7 +18,6 @@ type Middleware interface {
 }
 
 func GetUserHome(res http.ResponseWriter, req http.Request) {
-    // after you 
 	result, override := NewMiddlewareStack().Run(req)
 	// if a middleware wishes to respond an override is returned,
 	if override != nil {
