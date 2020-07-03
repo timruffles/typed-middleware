@@ -20,7 +20,7 @@ func GetUserHome(res http.ResponseWriter, req http.Request) {
 	result, override := NewMiddlewareStack().Run(req)
 	// 2️⃣ if a middleware wishes to respond an override is returned,
 	if override != nil {
-        // you can define your own response handlers that can inspect the response struct
+		// you can define your own response handlers that can inspect the response struct
 		middleware.DefaultRespond(override, res)
 		return
 	}
