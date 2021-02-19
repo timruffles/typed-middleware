@@ -1,4 +1,4 @@
-# typedmiddleware
+# typed-middleware
 
 Middleware is convenient but it comes at a cost to type safety and explicit code:
 - using `context.Context` to store and retrieve values is not type-safe, and relies on implicit temporal coupling
